@@ -1,3 +1,5 @@
+#include "Hooks.h"
+
 void InitializeLogger()
 {
     auto path = SKSE::log::log_directory();
@@ -26,7 +28,7 @@ void HandleMessage(SKSE::MessagingInterface::Message* a_message)
     switch (a_message->type) {
     case SKSE::MessagingInterface::kDataLoaded:
         {
-            INFO("Hello, {}!", SKSE::PluginDeclaration::GetSingleton()->GetAuthor());
+            Hooks::Install();
         }
         break;
     }
