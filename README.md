@@ -44,6 +44,7 @@ xmake require --upgrade
 
 ## Documentation
 [Usage](https://github.com/digital-apple/DerivedAttributeFramework/wiki/Usage)
+
 [Translation](https://github.com/digital-apple/DerivedAttributeFramework/wiki/Translation)
 
 ## Special Credits
