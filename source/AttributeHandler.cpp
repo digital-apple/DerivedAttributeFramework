@@ -79,13 +79,13 @@ void AttributeHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::Actor
 
 	const auto attribute_list = AttributeHandler::GetSingleton()->GetAttributeStringList(a_attribute, a_derived);
 
-	auto body_text = std::format("<font face='$EverywhereMediumFont'><p>{}</p><br>", sDAF_AttributesBeingIncreased->GetString());
+	auto body_text = std::format("<p>{}</p><br>", sDAF_AttributesBeingIncreased->GetString());
 
 	for (const auto& attribute : attribute_list) {
 		body_text += std::format("<p>{}: <font color='#{:X}'>{}</font> >> <font color='#{:X}'>{}</font></p>", std::get<0>(attribute), Settings::CurrentValueColor, std::get<1>(attribute), Settings::UpdatedValueColor, std::get<2>(attribute));
 	}
 
-	body_text += std::format("<br><p>{}</p></font>", sDAF_Proceed->GetString());
+	body_text += std::format("<br><p>{}</p>", sDAF_Proceed->GetString());
 
 	message->bodyText = body_text;
 
@@ -195,15 +195,15 @@ auto AttributeHandler::GetAttributeStringList(const RE::ActorValue a_attribute, 
 
 auto AttributeHandler::GetDerivedAttributes(const RE::ActorValue a_attribute) const -> std::vector<RE::ActorValue>
 {
-	std::vector<RE::ActorValue> temporary;
+	std::vector<RE::ActorValue> result;
 
 	if (attributes.contains(a_attribute)) {
 		for (const auto& derived : attributes.at(a_attribute).derived) {
-			temporary.push_back(derived.first);
+			result.push_back(derived.first);
 		}
 	}
 
-	return temporary;
+	return result;
 }
 
 void AttributeHandler::Load()
