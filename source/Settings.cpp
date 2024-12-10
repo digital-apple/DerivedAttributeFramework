@@ -95,6 +95,8 @@ auto Settings::Load() -> std::unordered_map<RE::ActorValue, AttributeHandler::At
 
 void Settings::CreateGameSettings()
 {
+	INFO("Settings::CreateGameSettings ~ Started creation");
+
 	const auto game_settings = RE::GameSettingCollection::GetSingleton();
 
 	if (!game_settings) {
@@ -133,4 +135,6 @@ void Settings::CreateGameSettings()
 	game_settings->InsertSetting(sDAF_Proceed);
 	game_settings->InsertSetting(sDAF_AttributesBeingIncreased);
 	game_settings->InsertSetting(sDAF_Description);
+
+	INFO("Settings::CreateGameSettings ~ Finished creation");
 }

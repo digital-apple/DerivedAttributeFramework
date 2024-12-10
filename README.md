@@ -1,4 +1,4 @@
-# CommonLibSSE-NG Plugin Template
+# Derived Attribute Framework
 
 This is a basic plugin template using CommonLibSSE-NG.
 
@@ -43,4 +43,16 @@ xmake require --upgrade
 ```
 
 ## Documentation
-Please refer to the [Wiki](https://github.com/qudix/commonlibsse-ng-template/wiki/Home) for more advanced topics.
+[Usage](https://github.com/digital-apple/DerivedAttributeFramework/wiki/Usage)
+[Translation](https://github.com/digital-apple/DerivedAttributeFramework/wiki/Translation)
+
+## Special Credits
+
+[Qudix](https://github.com/Qudix) for [CommonLibSSE-NG Template Plugin](https://github.com/qudix/commonlibsse-ng-template).
+
+[alandtse](https://github.com/alandtse) and all the people who contributed to [CommonLibVR/NG](https://github.com/alandtse/CommonLibVR/tree/ng).
+
+[powerofthree](https://github.com/powerof3), [Noah](https://github.com/NoahBoddie) and Orrie for general support.
+
+## License
+[GPL-3.0](LICENSE)
