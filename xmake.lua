@@ -2,8 +2,8 @@ set_xmakever("2.8.2")
 
 includes("libraries/commonlibsse-ng")
 
-set_project("Template")
-set_version("0.0.0")
+set_project("DerivedAttributeFramework")
+set_version("1.0.0")
 set_license("GPL-3.0")
 
 set_languages("c++23")
@@ -16,12 +16,14 @@ set_config("skyrim_vr", false)
 add_rules("mode.debug", "mode.releasedbg")
 add_rules("plugin.vsxmake.autoupdate")
 
-target("Template")
+add_requires("toml11")
+
+target("DerivedAttributeFramework")
     add_deps("commonlibsse-ng")
 
     add_rules("commonlibsse-ng.plugin", {
-        name = "Template",
-        author = "AUTHOR_NAME",
+        name = "DerivedAttributeFramework",
+        author = "digital-apple",
         description = ""
     })
 
@@ -29,6 +31,10 @@ target("Template")
     add_headerfiles("include/**.h")
     add_includedirs("include", { public = true })
     set_pcxxheader("include/PCH.h")
+
+    add_packages("toml11")
+
+    add_extrafiles("release/**.toml")
 	
     after_build(function(target)
         local copy = function(env, ext)
@@ -38,6 +44,7 @@ target("Template")
                     os.mkdir(plugins)
                     os.trycp(target:targetfile(), plugins)
                     os.trycp(target:symbolfile(), plugins)
+                    os.trycp("$(projectdir)/release/*.toml", plugins)
                 end
             end
         end

@@ -1,0 +1,124 @@
+# # # Settings
+
+# # Internal
+REQ_CoreScripts_AttributeSystem = "0xAD3B24~Requiem.esp"            # The Form ID and Mod Name of the Quest that holds the 'AttributeSystem' Reference Alias.
+
+# # Formatting
+LineBreak = false            # Adds a line break to the first whitespace of button names composed of two or more words.
+
+# # Colors
+CurrentValueColor = 0xFF0000
+UpdatedValueColor = 0x00FF00
+ButtonColor = 0xFFFFAA
+
+# # # Attributes
+
+# # Health
+
+[[Attributes]]
+Attribute = "Health"
+Weight = 5.0
+
+# Derived
+
+[[Attributes.Derived]]
+Attribute = "MeleeDamage"
+Weight = 1.5
+
+[[Attributes.Derived]]
+Attribute = "WeaponSpeedMult"
+Weight = 0.005
+
+[[Attributes.Derived]]
+Attribute = "ShoutRecoveryMult"
+Weight = 1.25
+
+# Extra
+
+[[Attributes.Extra]]
+Attribute = "PoisonResist"
+Weight = 1.0
+
+[[Attributes.Extra]]
+Attribute = "DiseaseResist"
+Weight = 1.0
+
+# # Magicka
+
+[[Attributes]]
+Attribute = "Magicka"
+Weight = 7.0
+
+# Derived
+
+[[Attributes.Derived]]
+Attribute = "Sneak" # Change that to Spell Power
+Weight = 0.625
+
+[[Attributes.Derived]]
+Attribute = "AlterationMod"
+Weight = 0.625
+
+# Derived Extra
+
+[[Attributes.Derived.Extra]]
+Attribute = "ConjurationMod"
+Weight = 0.625
+
+[[Attributes.Derived.Extra]]
+Attribute = "DestructionMod"
+Weight = 0.625
+
+[[Attributes.Derived.Extra]]
+Attribute = "IllusionMod"
+Weight = 0.625
+
+[[Attributes.Derived.Extra]]
+Attribute = "RestorationMod"
+Weight = 0.625
+
+# Derived
+
+[[Attributes.Derived]]
+Attribute = "MagicResist"
+Weight = 0.625
+
+# Extra
+
+[[Attributes.Extra]]
+Attribute = "Alchemy" # Change that to Toxicity
+Weight = 2.0
+
+[[Attributes.Extra]]
+Attribute = "MagickaRate"
+Weight = 2.0
+
+# # Stamina
+
+[[Attributes]]
+Attribute = "Stamina"
+Weight = 6.0
+
+# Derived
+
+[[Attributes.Derived]]
+Attribute = "MarksmanMod"
+Weight = 1.5
+
+[[Attributes.Derived]]
+Attribute = "SpeedMult"
+Weight = 0.3
+
+[[Attributes.Derived]]
+Attribute = "DamageResist"
+Weight = 7.5
+
+# Extra
+
+[[Attributes.Extra]]
+Attribute = "CarryWeight"
+Weight = 1.25
+
+[[Attributes.Extra]]
+Attribute = "StaminaRate"
+Weight = 1.25

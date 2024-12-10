@@ -1,4 +1,7 @@
+#include "AttributeHandler.h"
 #include "Hooks.h"
+#include "Scripts.h"
+#include "Settings.h"
 
 void InitializeLogger()
 {
@@ -26,9 +29,21 @@ void InitializeLogger()
 void HandleMessage(SKSE::MessagingInterface::Message* a_message)
 {
     switch (a_message->type) {
+    case SKSE::MessagingInterface::kInputLoaded:
+        {
+            Settings::CreateGameSettings();
+        }
+        break;
     case SKSE::MessagingInterface::kDataLoaded:
         {
             Hooks::Install();
+            AttributeHandler::GetSingleton()->Load();
+        }
+        break;
+    case SKSE::MessagingInterface::kNewGame:
+    case SKSE::MessagingInterface::kPostLoadGame:
+        {
+            Scripts::Disable();
         }
         break;
     }
@@ -39,6 +54,8 @@ SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
     InitializeLogger();
 
     SKSE::Init(a_skse);
+
+    SKSE::AllocTrampoline(14 * 3);
 
     const auto messaging_interface = SKSE::GetMessagingInterface();
 
