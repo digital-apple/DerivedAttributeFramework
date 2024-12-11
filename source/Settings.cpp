@@ -127,7 +127,7 @@ void Settings::CreateGameSettings()
 	auto sDAF_Description = RE::malloc<RE::Setting>();
 
 	sDAF_Description->name = const_cast<char*>("sDAF_Description");
-	sDAF_Description->data.s = const_cast<char*>("...");
+	sDAF_Description->data.s = const_cast<char*>("Choose a derived attribute to increase:");
 
 	stl::emplace_vtable<RE::Setting>(sDAF_Description);
 

@@ -24,6 +24,8 @@ auto LevelUpHandler::GetSingleton() -> LevelUpHandler*
 
 void LevelUpHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorValue a_attribute)
 {
+	INFO("LevelUpHandler::ConstructMessage ~ Queueing Message... Attribute: <{}>", Utility::FormatActorValueName(a_attribute));
+
 	if (!a_menu) {
 		return;
 	}
@@ -88,4 +90,6 @@ void LevelUpHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorVa
 	message->callback = RE::BSTSmartPointer<RE::IMessageBoxCallback>{ new ConfirmLevelUpAttributeCallbackEx(a_menu, a_attribute, derived_map, message->buttonText.size() - 1) };
 
 	message->QueueMessage();
+
+	INFO("LevelUpHandler::ConstructMessage ~ Queued Message!");
 }

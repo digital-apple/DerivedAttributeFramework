@@ -21,7 +21,15 @@ void AttributeHandler::AttributeHandlerCallback::Run(RE::IMessageBoxCallback::Me
 			const auto attribute_list = AttributeHandler::GetSingleton()->GetAttributeList(attribute, derived);
 
 			for (const auto& a : attribute_list) {
-				av_owner->ModActorValue(a.first, a.second);
+				INFO("AttributeHandler::AttributeHandlerCallback ~ Modifying Actor Value: <{}> by <{}>", Utility::FormatActorValueName(a.first), a.second);
+
+				if (a.second < 0.f) {
+					const auto current = av_owner->GetBaseActorValue(a.first);
+
+					av_owner->SetBaseActorValue(a.first, current + a.second);
+				} else {
+					av_owner->ModActorValue(a.first, a.second);
+				}
 			}
 
 			player->GetPlayerRuntimeData().skills->AdvanceLevel(0.f);
@@ -43,7 +51,7 @@ auto AttributeHandler::GetSingleton() -> AttributeHandler*
 
 void AttributeHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorValue a_attribute, const RE::ActorValue a_derived)
 {
-	INFO("AttributeHandler::ConstructMessage ~ Attribute: <{}>, Derived: <{}>", Utility::FormatActorValueName(a_attribute), Utility::FormatActorValueName(a_derived));
+	INFO("AttributeHandler::ConstructMessage ~ Queueing Message... Attribute: <{}>, Derived: <{}>", Utility::FormatActorValueName(a_attribute), Utility::FormatActorValueName(a_derived));
 
 	if (!a_menu) {
 		return;
@@ -98,6 +106,8 @@ void AttributeHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::Actor
 	message->callback = RE::BSTSmartPointer<RE::IMessageBoxCallback>{ new AttributeHandlerCallback(a_menu, a_attribute, a_derived) };
 
 	message->QueueMessage();
+
+	INFO("AttributeHandler::ConstructMessage ~ Queued Message!");
 }
 
 auto AttributeHandler::GetAttributeList(const RE::ActorValue a_attribute, const RE::ActorValue a_derived) const -> std::unordered_map<RE::ActorValue, float>
@@ -157,7 +167,7 @@ auto AttributeHandler::GetAttributeStringList(const RE::ActorValue a_attribute, 
 		const auto a_b = a_a.attribute.global.has_value() && a_a.attribute.global.value() ? a_a.attribute.global.value()->value : a_a.attribute.weight;
 		const auto a_c = av_owner->GetBaseActorValue(a_attribute);
 
-		result.push_back({ Utility::FormatActorValueName(a_attribute), a_c, std::trunc((a_c + a_b) * 10000.f) / 10000.f });
+		result.push_back({ Utility::FormatActorValueName(a_attribute), a_c, Utility::Round(a_c, a_b) });
 
 		if (a_a.extra.has_value()) {
 			const auto& a_d = a_a.extra.value();
@@ -166,7 +176,7 @@ auto AttributeHandler::GetAttributeStringList(const RE::ActorValue a_attribute, 
 				const auto b_a = extra.second.global.has_value() && extra.second.global.value() ? extra.second.global.value()->value : extra.second.weight;
 				const auto b_b = av_owner->GetBaseActorValue(extra.first);
 
-				result.push_back({ Utility::FormatActorValueName(extra.first), b_b, std::trunc((b_b + b_a) * 10000.f) / 10000.f });
+				result.push_back({ Utility::FormatActorValueName(extra.first), b_b, Utility::Round(b_b, b_a) });
 			}
 		}
 
@@ -175,7 +185,7 @@ auto AttributeHandler::GetAttributeStringList(const RE::ActorValue a_attribute, 
 			const auto c_b = c_a.attribute.global.has_value() && c_a.attribute.global.value() ? c_a.attribute.global.value()->value : c_a.attribute.weight;
 			const auto c_c = av_owner->GetBaseActorValue(a_derived);
 
-			result.push_back({ Utility::FormatActorValueName(a_derived), c_c, std::trunc((c_c + c_b) * 10000.f) / 10000.f });
+			result.push_back({ Utility::FormatActorValueName(a_derived), c_c, Utility::Round(c_c, c_b) });
 
 			if (c_a.extra.has_value()) {
 				const auto& c_d = c_a.extra.value();
@@ -184,7 +194,7 @@ auto AttributeHandler::GetAttributeStringList(const RE::ActorValue a_attribute, 
 					const auto d_a = extra.second.global.has_value() && extra.second.global.value() ? extra.second.global.value()->value : extra.second.weight;
 					const auto d_b = av_owner->GetBaseActorValue(extra.first);
 
-					result.push_back({ Utility::FormatActorValueName(extra.first), d_b, std::trunc((d_b + d_a) * 10000.f) / 10000.f });
+					result.push_back({ Utility::FormatActorValueName(extra.first), d_b, Utility::Round(d_b, d_a) });
 				}
 			}
 		}
