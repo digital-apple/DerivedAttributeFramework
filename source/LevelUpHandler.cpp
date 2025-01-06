@@ -6,6 +6,8 @@
 
 void LevelUpHandler::ConfirmLevelUpAttributeCallbackEx::Run(RE::IMessageBoxCallback::Message a_message)
 {
+	Lock(false);
+
 	const auto message = static_cast<std::int32_t>(a_message);
 
 	if (message == cancel_index) {
@@ -22,11 +24,31 @@ auto LevelUpHandler::GetSingleton() -> LevelUpHandler*
 	return std::addressof(singleton);
 }
 
+void LevelUpHandler::Lock(bool a_lock)
+{
+	GetSingleton()->locked.store(a_lock);
+}
+
+bool LevelUpHandler::Locked()
+{
+	return GetSingleton()->locked;
+}
+
 void LevelUpHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorValue a_attribute)
 {
+	if (Locked()) {
+		WARN("LevelUpHandler::ConstructMessage ~ The message queue is currently locked. Returning...");
+
+		return;
+	}
+
+	Lock(true);
+
 	INFO("LevelUpHandler::ConstructMessage ~ Queueing Message... Attribute: <{}>", Utility::FormatActorValueName(a_attribute));
 
 	if (!a_menu) {
+		Lock(false);
+		
 		return;
 	}
 
@@ -35,6 +57,8 @@ void LevelUpHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorVa
 	const auto interface_strings = RE::InterfaceStrings::GetSingleton();
 
 	if (!factory_manager || !game_settings || !interface_strings) {
+		Lock(false);
+
 		return;
 	}
 
@@ -42,6 +66,8 @@ void LevelUpHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorVa
 	const auto message = message_factory ? message_factory->Create() : nullptr;
 
 	if (!message) {
+		Lock(false);
+
 		return;
 	}
 
@@ -51,6 +77,8 @@ void LevelUpHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorVa
 	const auto sCancel = game_settings->GetSetting("sCancel");
 
 	if (!sDAF_CurrentlyIncreasing || !sDAF_Description || !sCancel) {
+		Lock(false);
+
 		return;
 	}
 

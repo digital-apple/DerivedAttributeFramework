@@ -27,6 +27,9 @@ public:
 	static auto GetSingleton() -> LevelUpHandler*;
 
 	static void ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorValue a_attribute);
+
+	static bool Locked();
+	static void Lock(bool a_lock);
 private:
 	LevelUpHandler() = default;
 	LevelUpHandler(const LevelUpHandler&) = delete;
@@ -36,4 +39,6 @@ private:
 
 	LevelUpHandler& operator=(const LevelUpHandler&) = delete;
 	LevelUpHandler& operator=(LevelUpHandler&&) = delete;
+
+	std::atomic<bool> locked;
 };

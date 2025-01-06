@@ -51,6 +51,8 @@ auto AttributeHandler::GetSingleton() -> AttributeHandler*
 
 void AttributeHandler::ConstructMessage(RE::LevelUpMenu* a_menu, const RE::ActorValue a_attribute, const RE::ActorValue a_derived)
 {
+	// Would be locking in here necessary?
+
 	INFO("AttributeHandler::ConstructMessage ~ Queueing Message... Attribute: <{}>, Derived: <{}>", Utility::FormatActorValueName(a_attribute), Utility::FormatActorValueName(a_derived));
 
 	if (!a_menu) {
