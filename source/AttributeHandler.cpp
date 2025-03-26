@@ -23,13 +23,9 @@ void AttributeHandler::AttributeHandlerCallback::Run(RE::IMessageBoxCallback::Me
 			for (const auto& a : attribute_list) {
 				INFO("AttributeHandler::AttributeHandlerCallback ~ Modifying Actor Value: <{}> by <{}>", Utility::FormatActorValueName(a.first), a.second);
 
-				if (a.second < 0.f) {
-					const auto current = av_owner->GetBaseActorValue(a.first);
+				const auto current = av_owner->GetBaseActorValue(a.first);
 
-					av_owner->SetBaseActorValue(a.first, current + a.second);
-				} else {
-					av_owner->ModActorValue(a.first, a.second);
-				}
+				av_owner->SetBaseActorValue(a.first, current + a.second);
 			}
 
 			player->GetPlayerRuntimeData().skills->AdvanceLevel(0.f);
