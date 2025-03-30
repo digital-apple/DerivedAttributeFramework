@@ -1,6 +1,7 @@
 #include "AttributeHandler.h"
 
 #include "LevelUpHandler.h"
+#include "Serialization.h"
 #include "Settings.h"
 #include "Utility.h"
 
@@ -26,6 +27,8 @@ void AttributeHandler::AttributeHandlerCallback::Run(RE::IMessageBoxCallback::Me
 				const auto current = av_owner->GetBaseActorValue(a.first);
 
 				av_owner->SetBaseActorValue(a.first, current + a.second);
+
+				Serialization::Queue(a.first);
 			}
 
 			player->GetPlayerRuntimeData().skills->AdvanceLevel(0.f);

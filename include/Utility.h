@@ -112,7 +112,7 @@ namespace Utility
 
 	inline static auto Round(float a_a, float a_b) -> float
 	{
-		auto result = std::format("{:.2f}", (a_a + a_b));
+		auto result = std::format("{:.4f}", (a_a + a_b));
 
 		return std::stof(result);
 	}
