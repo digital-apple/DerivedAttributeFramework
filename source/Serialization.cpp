@@ -63,6 +63,13 @@ void Serialization::OnGameSaved(SKSE::SerializationInterface* a_interface)
 	}
 
 	const auto& queue = GetSingleton()->queue;
+	const auto queue_size = queue.size();
+
+	if (!a_interface->WriteRecordData(&queue_size, sizeof(queue_size))) {
+		ERROR("Serialization::OnGameSaved ~ Failed to serialize the number of elements inside the queue!");
+
+		return;
+	}
 
 	if (queue.empty()) {
 		ERROR("Serialization::OnGameSaved ~ The queue is currently empty! Aborting serialization...");
@@ -75,14 +82,6 @@ void Serialization::OnGameSaved(SKSE::SerializationInterface* a_interface)
 
 	if (!av_storage) {
 		ERROR("Serialization::OnGameSaved ~ Failed to obtain the player's actor value storage! Aborting serialization...");
-
-		return;
-	}
-
-	const auto queue_size = queue.size();
-
-	if (!a_interface->WriteRecordData(&queue_size, sizeof(queue_size))) {
-		ERROR("Serialization::OnGameSaved ~ Failed to serialize the number of elements inside the queue!");
 
 		return;
 	}
