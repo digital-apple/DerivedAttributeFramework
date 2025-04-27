@@ -1,7 +1,6 @@
 #include "AttributeHandler.h"
 #include "Hooks.h"
 #include "Scripts.h"
-#include "Serialization.h"
 #include "Settings.h"
 
 void InitializeLogger()
@@ -50,15 +49,6 @@ void HandleMessage(SKSE::MessagingInterface::Message* a_message)
     }
 }
 
-void InitializeSerialization()
-{
-    const auto serialization_interface = SKSE::GetSerializationInterface();
-
-    serialization_interface->SetUniqueID(Serialization::kModID);
-    serialization_interface->SetSaveCallback(Serialization::OnGameSaved);
-    serialization_interface->SetLoadCallback(Serialization::OnGameLoaded);
-}
-
 SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
 {
     InitializeLogger();
@@ -72,8 +62,6 @@ SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
     if (!messaging_interface) { stl::report_and_fail("Failed to communicate with the messaging interface!"); }
 
     messaging_interface->RegisterListener(HandleMessage);
-
-    InitializeSerialization();
 
     return true;
 }

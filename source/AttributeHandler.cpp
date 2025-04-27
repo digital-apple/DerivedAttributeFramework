@@ -1,7 +1,6 @@
 #include "AttributeHandler.h"
 
 #include "LevelUpHandler.h"
-#include "Serialization.h"
 #include "Settings.h"
 #include "Utility.h"
 
@@ -24,11 +23,7 @@ void AttributeHandler::AttributeHandlerCallback::Run(RE::IMessageBoxCallback::Me
 			for (const auto& a : attribute_list) {
 				INFO("AttributeHandler::AttributeHandlerCallback ~ Modifying Actor Value: <{}> by <{}>", Utility::FormatActorValueName(a.first), a.second);
 
-				const auto current = av_owner->GetBaseActorValue(a.first);
-
-				av_owner->SetBaseActorValue(a.first, current + a.second);
-
-				Serialization::Queue(a.first);
+				av_owner->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kPermanent, a.first, a.second);
 			}
 
 			player->GetPlayerRuntimeData().skills->AdvanceLevel(0.f);
@@ -165,37 +160,47 @@ auto AttributeHandler::GetAttributeStringList(const RE::ActorValue a_attribute, 
 
 	if (attributes.contains(a_attribute)) {
 		const auto& a_a = attributes.at(a_attribute);
-		const auto a_b = a_a.attribute.global.has_value() && a_a.attribute.global.value() ? a_a.attribute.global.value()->value : a_a.attribute.weight;
-		const auto a_c = av_owner->GetBaseActorValue(a_attribute);
+		
+		if (!a_a.attribute.hidden) {
+			const auto a_b = a_a.attribute.global.has_value() && a_a.attribute.global.value() ? a_a.attribute.global.value()->value : a_a.attribute.weight;
+			const auto a_c = av_owner->GetBaseActorValue(a_attribute);
 
-		result.push_back({ Utility::FormatActorValueName(a_attribute), a_c, Utility::Round(a_c, a_b) });
+			result.push_back({ Utility::FormatActorValueName(a_attribute), a_c, Utility::Round(a_c, a_b) });
+		}
 
 		if (a_a.extra.has_value()) {
 			const auto& a_d = a_a.extra.value();
 
 			for (const auto& extra : a_d) {
-				const auto b_a = extra.second.global.has_value() && extra.second.global.value() ? extra.second.global.value()->value : extra.second.weight;
-				const auto b_b = av_owner->GetBaseActorValue(extra.first);
+				if (!extra.second.hidden) {
+					const auto b_a = extra.second.global.has_value() && extra.second.global.value() ? extra.second.global.value()->value : extra.second.weight;
+					const auto b_b = av_owner->GetBaseActorValue(extra.first);
 
-				result.push_back({ Utility::FormatActorValueName(extra.first), b_b, Utility::Round(b_b, b_a) });
+					result.push_back({ Utility::FormatActorValueName(extra.first), b_b, Utility::Round(b_b, b_a) });
+				}
 			}
 		}
 
 		if (a_a.derived.contains(a_derived)) {
 			const auto& c_a = a_a.derived.at(a_derived);
-			const auto c_b = c_a.attribute.global.has_value() && c_a.attribute.global.value() ? c_a.attribute.global.value()->value : c_a.attribute.weight;
-			const auto c_c = av_owner->GetBaseActorValue(a_derived);
 
-			result.push_back({ Utility::FormatActorValueName(a_derived), c_c, Utility::Round(c_c, c_b) });
+			if (!c_a.attribute.hidden) {
+				const auto c_b = c_a.attribute.global.has_value() && c_a.attribute.global.value() ? c_a.attribute.global.value()->value : c_a.attribute.weight;
+				const auto c_c = av_owner->GetBaseActorValue(a_derived);
+
+				result.push_back({ Utility::FormatActorValueName(a_derived), c_c, Utility::Round(c_c, c_b) });
+			}
 
 			if (c_a.extra.has_value()) {
 				const auto& c_d = c_a.extra.value();
 
 				for (const auto& extra : c_d) {
-					const auto d_a = extra.second.global.has_value() && extra.second.global.value() ? extra.second.global.value()->value : extra.second.weight;
-					const auto d_b = av_owner->GetBaseActorValue(extra.first);
+					if (!extra.second.hidden) {
+						const auto d_a = extra.second.global.has_value() && extra.second.global.value() ? extra.second.global.value()->value : extra.second.weight;
+						const auto d_b = av_owner->GetBaseActorValue(extra.first);
 
-					result.push_back({ Utility::FormatActorValueName(extra.first), d_b, Utility::Round(d_b, d_a) });
+						result.push_back({ Utility::FormatActorValueName(extra.first), d_b, Utility::Round(d_b, d_a) });
+					}
 				}
 			}
 		}

@@ -7,6 +7,7 @@ public:
 	{
 		float weight;
 		std::optional<RE::TESGlobal*> global;
+		bool hidden;
 	};
 
 	struct DerivedAttribute

@@ -25,6 +25,7 @@ auto Settings::Load() -> std::unordered_map<RE::ActorValue, AttributeHandler::At
 			const auto a_a = Utility::GetActorValue(toml::find<std::string_view>(attribute, "Attribute"));
 			const auto a_b = toml::find<float>(attribute, "Weight");
 			const auto a_c = attribute.contains("Global") ? Utility::GetForm<RE::TESGlobal>(toml::find<std::string_view>(attribute, "Global")) : std::nullopt;
+			const auto a_d = toml::find_or<bool>(attribute, "Hidden", false);
 
 			std::unordered_map<RE::ActorValue, AttributeHandler::DerivedAttribute> temporary_derived;
 
@@ -34,6 +35,7 @@ auto Settings::Load() -> std::unordered_map<RE::ActorValue, AttributeHandler::At
 				const auto b_a = Utility::GetActorValue(toml::find<std::string_view>(derived, "Attribute"));
 				const auto b_b = toml::find<float>(derived, "Weight");
 				const auto b_c = derived.contains("Global") ? Utility::GetForm<RE::TESGlobal>(toml::find<std::string_view>(derived, "Global")) : std::nullopt;
+				const auto b_d = toml::find_or<bool>(derived, "Hidden", false);
 
 				std::optional<std::unordered_map<RE::ActorValue, AttributeHandler::Attribute>> temporary_extra;
 
@@ -44,18 +46,19 @@ auto Settings::Load() -> std::unordered_map<RE::ActorValue, AttributeHandler::At
 						const auto c_a = Utility::GetActorValue(toml::find<std::string_view>(extra, "Attribute"));
 						const auto c_b = toml::find<float>(extra, "Weight");
 						const auto c_c = extra.contains("Global") ? Utility::GetForm<RE::TESGlobal>(toml::find<std::string_view>(extra, "Global")) : std::nullopt;
+						const auto c_d = toml::find_or<bool>(extra, "Hidden", false);
 
-						const auto c_d = AttributeHandler::Attribute{ c_b, c_c };
+						const auto c_e = AttributeHandler::Attribute{ c_b, c_c, c_d };
 
 						if (!temporary_extra.has_value()) {
 							temporary_extra.emplace();
 						}
 
-						temporary_extra.value().insert_or_assign(c_a, c_d);
+						temporary_extra.value().insert_or_assign(c_a, c_e);
 					}
 				}
 
-				const auto data_derived = AttributeHandler::DerivedAttribute{ AttributeHandler::Attribute{ b_b, b_c }, temporary_extra };
+				const auto data_derived = AttributeHandler::DerivedAttribute{ AttributeHandler::Attribute{ b_b, b_c, b_d }, temporary_extra };
 
 				temporary_derived.insert_or_assign(b_a, data_derived);
 			}
@@ -69,18 +72,19 @@ auto Settings::Load() -> std::unordered_map<RE::ActorValue, AttributeHandler::At
 					const auto d_a = Utility::GetActorValue(toml::find<std::string_view>(extra, "Attribute"));
 					const auto d_b = toml::find<float>(extra, "Weight");
 					const auto d_c = extra.contains("Global") ? Utility::GetForm<RE::TESGlobal>(toml::find<std::string_view>(extra, "Global")) : std::nullopt;
+					const auto d_d = toml::find_or<bool>(extra, "Hidden", false);
 
-					const auto d_d = AttributeHandler::Attribute{ d_b, d_c };
+					const auto d_e = AttributeHandler::Attribute{ d_b, d_c, d_d };
 
 					if (!temporary_extra.has_value()) {
 						temporary_extra.emplace();
 					}
 
-					temporary_extra.value().insert_or_assign(d_a, d_d);
+					temporary_extra.value().insert_or_assign(d_a, d_e);
 				}
 			}
 
-			const auto temporary_attribute = AttributeHandler::AttributeList{ AttributeHandler::Attribute{ a_b, a_c }, temporary_derived, temporary_extra };
+			const auto temporary_attribute = AttributeHandler::AttributeList{ AttributeHandler::Attribute{ a_b, a_c, a_d }, temporary_derived, temporary_extra };
 
 			result.insert_or_assign(a_a, temporary_attribute);
 		}
